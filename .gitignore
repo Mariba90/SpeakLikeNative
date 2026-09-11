@@ -28,3 +28,5 @@ TestResults.xml
 node_modules/
 .next/
 .env.local
+.vercel
+.env*
