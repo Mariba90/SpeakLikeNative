@@ -1,0 +1,2 @@
+import type { SVGProps } from "react";
+export function LogoMark(props: SVGProps<SVGSVGElement>) { return <svg viewBox="0 0 40 40" fill="none" aria-hidden="true" {...props}><path d="M20 4a16 16 0 1 0 16 16" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round"/><path d="M18 12.5a4.5 4.5 0 0 1 9 0v7a4.5 4.5 0 0 1-9 0v-7Z" fill="currentColor"/><path d="M13.5 19a9 9 0 0 0 18 0M22.5 28v5M17.5 33h10" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/></svg>; }

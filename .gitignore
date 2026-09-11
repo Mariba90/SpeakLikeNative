@@ -24,3 +24,7 @@ TestResults.xml
 
 # env file
 .env
+# Next.js and local dependencies
+node_modules/
+.next/
+.env.local
