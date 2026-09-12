@@ -14,6 +14,17 @@ const supportedMediaTypes = new Set([
 const supportedExtensions = new Set(["webm", "mp4", "m4a", "mp3", "mpeg", "wav", "ogg", "aac"]);
 export const MAX_AUDIO_BYTES = 10 * 1024 * 1024;
 
+export type TranscriptionUsage = {
+  seconds?: number;
+  inputTokens?: number;
+  outputTokens?: number;
+};
+
+export type TranscriptionResult = {
+  transcript: string;
+  usage: TranscriptionUsage;
+};
+
 export function validateAudio(file: File) {
   if (!file.size) throw new Error("The audio file is empty.");
   if (file.size > MAX_AUDIO_BYTES) throw new Error("Please keep recordings under 10 MB.");
@@ -24,9 +35,23 @@ export function validateAudio(file: File) {
   }
 }
 
-export async function transcribeAudio(file: File) {
+export async function transcribeAudio(file: File): Promise<TranscriptionResult> {
   validateAudio(file);
-  const result = await getOpenAI().audio.transcriptions.create({ file, model: MODELS.transcription, language: "en" } as never);
+  const result = await getOpenAI().audio.transcriptions.create({
+    file,
+    model: MODELS.transcription,
+    language: "en",
+  } as never) as {
+    text?: string;
+    usage?: { seconds?: number; input_tokens?: number; output_tokens?: number };
+  };
   if (!result.text?.trim()) throw new Error("We couldn't detect spoken English in that recording. Please try again in a quieter place.");
-  return result.text.trim();
+  return {
+    transcript: result.text.trim(),
+    usage: {
+      seconds: result.usage?.seconds,
+      inputTokens: result.usage?.input_tokens,
+      outputTokens: result.usage?.output_tokens,
+    },
+  };
 }
